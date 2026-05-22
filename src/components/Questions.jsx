@@ -1,54 +1,65 @@
+import React from 'react'
 import Question from "./Question"
+import gradeAnswers from "../utils/gradeAnswers"
+import Skeleton from "./Skeleton.jsx" 
 
-export default function Questions({questionsArray}) {
-    console.log("Questions component rendered")
+
+export default function Questions({questionsArray, toggleStart}) {
     const isLoading = questionsArray.length === 0
-    const skeletonWidths = ["72%", "84%", "64%", "78%", "70%"]
+    const [optionStates, setOptionStates] = React.useState({})
+    const [score, setScore] = React.useState(null)
 
-    function gradeAnswers(formData) {
-        console.log("Grading answers...")
+    function checkAnswers (formData) {
         const userAnswers = Object.fromEntries(formData)
-        console.log(userAnswers)
+        const result = gradeAnswers(userAnswers, questionsArray)
+        setScore("Your scored " + result.score + " / " + questionsArray.length + " correct answers")
+        setOptionStates(result.optionStates)
     }
 
     function handleSubmit(event) {
-    event.preventDefault()
+        event.preventDefault()
 
-    const form = event.currentTarget
-    if (!form.checkValidity()) {
-        form.reportValidity()
-        return
-    }
+        if (score) {
+            toggleStart()
+            return
+        }
 
-    const formData = new FormData(form)
-    gradeAnswers(formData)
+        const form = event.currentTarget
+        if (!form.checkValidity()) {
+            form.reportValidity()
+            return
+        }
+
+        const formData = new FormData(form)
+        checkAnswers(formData)
     }
 
     return (
     <>
         <form onSubmit={handleSubmit} className="questions-main">
             {isLoading ? (
-                <div className="question-skeletons" aria-busy="true" aria-live="polite">
-                    {skeletonWidths.map((width, index) => (
-                        <div className="question question-skeleton" key={index}>
-                            <div className="skeleton skeleton-title" style={{ width }} />
-                            <div className="radio-inputs skeleton-options">
-                                <span className="skeleton skeleton-pill" />
-                                <span className="skeleton skeleton-pill" />
-                                <span className="skeleton skeleton-pill" />
-                                <span className="skeleton skeleton-pill" />
-                            </div>
-                        </div>
-                    ))}
-                    <p className="loading-text">Loading questions...</p>
-                </div>
+                <Skeleton />
             ) : (
                 questionsArray.map((question, index) => (
-                    <Question key={index} questionId={`q${index + 1}`} questionObj={question} />
+                    <Question
+                        key={index}
+                        questionId={`${index + 1}`}
+                        questionObj={question}
+                        optionStates={ optionStates?.[index] || {} }
+                    />
                 ))
             )}
 
-            <button className="check-answers-btn" type="submit" disabled={isLoading} >Check answers</button>
+            <div className="feedback-container">
+                {score && <p className="score">{score}</p>}
+                <button
+                    className="check-answers-btn"
+                    type="submit" disabled={isLoading}
+                    
+                >
+                    {score ? "Play Again" : "Check answers"}
+                </button>
+            </div>
 
         </form>
     </>

@@ -12,7 +12,7 @@ export default function Form({toggleStart, fetchQuestions}) {
         <form action={handleSubmit} className="landing-form">
             <div className='form-container'>
             <label htmlFor="number-of-questions">Number of Questions</label>
-            <input type="number" id="number-of-questions" name="num" min="5" max="25" defaultValue={10} />
+            <input type="number" id="number-of-questions" name="num" min="2" max="25" defaultValue={2} />
 
             <label htmlFor="category">Select Category</label>
             <select id="category" name="category">

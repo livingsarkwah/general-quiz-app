@@ -145,9 +145,7 @@ button.btn-small {
     margin: 3em 0;
 }
 
-.questions-main button {
-    align-self: center;
-}
+
 
 /* question styling */
 .question {
@@ -181,13 +179,12 @@ button.btn-small {
   align-items: center;
   border: none;
   padding: 0.75rem;
-  padding-left: 0.1rem;
   color: rgb(51, 65, 85);
   transition: all .15s ease-in-out;
 }
 
 .radio-inputs .radio input {
-    opacity: 0;
+    display: none;
 }
 
 .radio-inputs .radio:not(:last-child) {
@@ -197,7 +194,7 @@ button.btn-small {
 
 .radio:hover,
 .radio:focus,
-.radio:has(input:checked) {
+.radio.selected {
   background-color: #F5F7FB;
   font-weight: 600;
 }
@@ -207,7 +204,8 @@ button.btn-small {
     display: flex;
     flex-direction: column;
     gap: 0;
-    width: 100%;
+    min-width: 65vw;
+    max-width: 650px;
 }
 
 .question-skeleton {
@@ -273,6 +271,17 @@ button.btn-small {
     }
 }
 
+.feedback-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    align-self: center;
+}
+
+
+
 .check-answers-btn:disabled {
     opacity: 0.65;
     cursor: not-allowed;
@@ -287,22 +296,25 @@ button.btn-small {
 }
 
 
+
+
 /* Grading styles */
-.graded {
-    pointer-events: none;
-    color: #4D5B9E;
-}
 
 .correct {
     background-color: #94d7a2;
-    color: #065f46;
     font-weight: 700;
+    cursor: not-allowed;
+    color: #4D5B9E;
 }
 
-.incorrect {
+.wrong {
     background-color: #f8bcbc;
+    cursor: not-allowed;
+    color: #4D5B9E;
 }
 
-.not-picked {
-    background-color: #fef3c7;
+.not-selected {
+    background-color: #F5F7FB;
+    cursor: not-allowed;
+    color: #4D5B9E;
 }
